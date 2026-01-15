@@ -1,27 +1,27 @@
 "use client";
 
-import { useState } from 'react';
-import { VideoInfo } from '@/types/youtube';
+import { useState } from "react";
+import { VideoInfo } from "@/types/youtube";
 
 export default function Home() {
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState("");
   const [data, setData] = useState<VideoInfo | null>(null);
   const [loading, setLoading] = useState(false);
-  const [selectedUrl, setSelectedUrl] = useState('');
+  const [selectedUrl, setSelectedUrl] = useState("");
 
   const handleAnalyze = async () => {
     if (!url) return;
     setLoading(true);
     setData(null); // Reset précédent
     try {
-      const res = await fetch('/api/download', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url }),
       });
       const result = await res.json();
       if (result.error) throw new Error(result.error);
-      
+
       setData(result);
       if (result.formats?.length > 0) {
         setSelectedUrl(result.formats[0].url);
@@ -74,10 +74,10 @@ export default function Home() {
             {/* Image avec sécurité */}
             <div className="relative h-56 sm:h-72 w-full bg-slate-200">
               {data.thumbnail && (
-                <img 
-                  src={data.thumbnail} 
-                  alt="Video Preview" 
-                  className="w-full h-full object-cover" 
+                <img
+                  src={data.thumbnail}
+                  alt="Video Preview"
+                  className="w-full h-full object-cover"
                 />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -90,7 +90,7 @@ export default function Home() {
               <label className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">
                 Qualité disponible
               </label>
-              
+
               <div className="space-y-4">
                 <select
                   className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:ring-2 focus:ring-red-600 outline-none appearance-none cursor-pointer font-medium"
@@ -98,9 +98,9 @@ export default function Home() {
                   onChange={(e) => setSelectedUrl(e.target.value)}
                   style={{
                     backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'right 1.25rem center',
-                    backgroundSize: '1.2em'
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "right 1.25rem center",
+                    backgroundSize: "1.2em",
                   }}
                 >
                   {data.formats.map((f, i) => (
@@ -111,19 +111,19 @@ export default function Home() {
                 </select>
 
                 <button
-                  onClick={() => window.open(selectedUrl, '_blank')}
-                  className="group flex items-center justify-center gap-3 w-full bg-red-600 hover:bg-red-700 text-white font-black py-5 rounded-2xl transition-all shadow-lg shadow-red-200 active:scale-[0.98]"
+                  onClick={() => (window.location.href = selectedUrl)} // Appel direct à notre API GET
+                  className="bg-red-600 hover:bg-red-700 text-white font-black py-5 rounded-2xl transition-all shadow-lg"
                 >
-                  <svg className="w-6 h-6 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
                   TÉLÉCHARGER MAINTENANT
                 </button>
               </div>
-              
+
               <p className="mt-6 text-[11px] text-center text-slate-400 leading-relaxed uppercase tracking-tighter">
-                Note technique : Le flux est extrait directement des serveurs Google.<br/>
-                En cas de blocage, clic-droit sur la vidéo {'>'} &quot;Enregistrer sous&quot;.
+                Note technique : Le flux est extrait directement des serveurs
+                Google.
+                <br />
+                En cas de blocage, clic-droit sur la vidéo {">"}{" "}
+                &quot;Enregistrer sous&quot;.
               </p>
             </div>
           </div>
@@ -133,7 +133,8 @@ export default function Home() {
       {/* Footer Sarino */}
       <footer className="mt-20 text-center">
         <p className="text-slate-400 text-sm">
-          Propulsé par la technologie <span className="font-bold text-slate-800">Sarino.Lab</span>
+          Propulsé par la technologie{" "}
+          <span className="font-bold text-slate-800">Sarino.Lab</span>
         </p>
         <div className="flex justify-center gap-4 mt-2 text-[10px] font-bold text-slate-300 uppercase tracking-[0.3em]">
           <span>Next.js 15</span>
